@@ -53,6 +53,9 @@ func (tc *taskController) GetTaskById(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	if taskRes.ID == 0 {
+		return c.NoContent(http.StatusNotFound)
+	}
 	return c.JSON(http.StatusOK, taskRes)
 }
 
