@@ -1,0 +1,197 @@
+openapi: 3.0.3
+info:
+  title: go-sample - OpenAPI 3.0
+  description: |-
+    Go, Echo, Sample
+  version: 1.0.11
+tags:
+  - name: tasks
+    description: Everything about your task
+  - name: user
+    description: Operations about user
+paths:
+  /tasks:
+    post:
+      tags:
+        - tasks
+      summary: Add a new task
+      description: Add a new task
+      requestBody:
+        description: Create a new task
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+    get:
+      tags:
+        - tasks
+      summary: Get all tasks
+      description: Get all tasks
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaskResponse"
+  /tasks/{taskId}:
+    get:
+      tags:
+        - tasks
+      summary: Find task by ID
+      description: Returns a single task
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+    put:
+      tags:
+        - tasks
+      summary: Update a task
+      description: update a task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequest"
+        required: true
+      parameters:
+        - name: taskId
+          in: path
+          description: Task id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
+          description: Invalid task value
+    delete:
+      tags:
+        - tasks
+      summary: Deletes a task
+      description: delete a task
+      parameters:
+        - name: taskId
+          in: path
+          description: Task id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid task value
+  /login:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
+      responses:
+        200:
+          description: successful operation
+  /signup:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: Create user info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
+      responses:
+        201:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+components:
+  schemas:
+    TaskResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 10
+        title:
+          type: string
+          format: string
+          example: "TEST"
+        updated_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+    TaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          format: string
+          example: "TEST"
+      required:
+        - title
+    UserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - password
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 10
+        email:
+          type: string
+          format: email
